@@ -1,6 +1,6 @@
-'use client';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { useState } from 'react';
+"use client";
+import { motion, useMotionValue, useTransform } from "framer-motion";
+import { useState } from "react";
 
 interface CardRotateProps {
   children: React.ReactNode;
@@ -15,7 +15,10 @@ function CardRotate({ children, onSendToBack, sensitivity }: CardRotateProps) {
   const rotateY = useTransform(x, [-100, 100], [-60, 60]);
 
   function handleDragEnd(_: never, info: { offset: { x: number; y: number } }) {
-    if (Math.abs(info.offset.x) > sensitivity || Math.abs(info.offset.y) > sensitivity) {
+    if (
+      Math.abs(info.offset.x) > sensitivity ||
+      Math.abs(info.offset.y) > sensitivity
+    ) {
       onSendToBack();
     } else {
       x.set(0);
@@ -30,7 +33,7 @@ function CardRotate({ children, onSendToBack, sensitivity }: CardRotateProps) {
       drag
       dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
       dragElastic={0.6}
-      whileTap={{ cursor: 'grabbing' }}
+      whileTap={{ cursor: "grabbing" }}
       onDragEnd={handleDragEnd}
     >
       {children}
@@ -53,36 +56,35 @@ export default function Stack({
   cardDimensions = { width: 208, height: 208 },
   cardsData = [],
   animationConfig = { stiffness: 260, damping: 20 },
-  sendToBackOnClick = false
+  sendToBackOnClick = false,
 }: StackProps) {
   const [cards, setCards] = useState(
     cardsData.length
       ? cardsData
       : [
-        {
-          id: 1,
-          img: 'https://i.pinimg.com/736x/09/20/d8/0920d80a8878e25d1cde0238140470e9.jpg'
-        },
-        {
-          id: 2,
-          img: 'https://i.pinimg.com/736x/f9/02/0c/f9020cf15f4909b5d73bae69836ee107.jpg'
-        },
-        {
-          id: 3,
-          img: 'https://i.pinimg.com/736x/bf/41/5f/bf415f5aac2383dc5a5a1f7514dbdb6a.jpg'
-        },
-        {
-          id: 4,
-          img:'https://i.pinimg.com/1200x/94/c8/22/94c822feb3543355bfb83a282257e082.jpg'
-
-        }
-      ]
+          {
+            id: 1,
+            img: "https://i.pinimg.com/736x/e0/f1/97/e0f1975e46e92e4c989972d69ae63537.jpg",
+          },
+          {
+            id: 2,
+            img: "https://i.pinimg.com/736x/18/24/f7/1824f70feddf4860660aad6d027ad673.jpg",
+          },
+          {
+            id: 3,
+            img: "https://i.pinimg.com/736x/5f/ad/eb/5fadeb20ab726680e01b9647d3acbe48.jpg",
+          },
+          {
+            id: 4,
+            img: "https://i.pinimg.com/1200x/41/eb/1d/41eb1d0a51246136a8f9f32302d17893.jpg",
+          },
+        ]
   );
 
   const sendToBack = (id: number) => {
-    setCards(prev => {
+    setCards((prev) => {
       const newCards = [...prev];
-      const index = newCards.findIndex(card => card.id === id);
+      const index = newCards.findIndex((card) => card.id === id);
       const [card] = newCards.splice(index, 1);
       newCards.unshift(card);
       return newCards;
@@ -95,7 +97,7 @@ export default function Stack({
       style={{
         width: cardDimensions.width,
         height: cardDimensions.height,
-        perspective: 600
+        perspective: 600,
       }}
     >
       {cards.map((card, index) => {
@@ -103,27 +105,35 @@ export default function Stack({
         const randomRotate = randomRotation ? Math.random() * 10 - 5 : 0;
 
         return (
-          <CardRotate key={card.id} onSendToBack={() => sendToBack(card.id)} sensitivity={sensitivity}>
+          <CardRotate
+            key={card.id}
+            onSendToBack={() => sendToBack(card.id)}
+            sensitivity={sensitivity}
+          >
             <motion.div
               className="rounded-2xl overflow-hidden border-4 border-white"
               onClick={() => sendToBackOnClick && sendToBack(card.id)}
               animate={{
                 rotateZ: (cards.length - index - 1) * 4 + randomRotate,
                 scale: 1 + index * 0.06 - cards.length * 0.06,
-                transformOrigin: '90% 90%'
+                transformOrigin: "90% 90%",
               }}
               initial={false}
               transition={{
-                type: 'spring',
+                type: "spring",
                 stiffness: animationConfig.stiffness,
-                damping: animationConfig.damping
+                damping: animationConfig.damping,
               }}
               style={{
                 width: cardDimensions.width,
-                height: cardDimensions.height
+                height: cardDimensions.height,
               }}
             >
-              <img src={card.img} alt={`card-${card.id}`} className="w-full h-full object-cover pointer-events-none" />
+              <img
+                src={card.img}
+                alt={`card-${card.id}`}
+                className="w-full h-full object-cover pointer-events-none"
+              />
             </motion.div>
           </CardRotate>
         );
